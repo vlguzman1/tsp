@@ -1,0 +1,10 @@
+<div class="card-columns">
+  <div class="card" ng-repeat="category in results">
+    <div class="card-header">{{category.nombre}}</div>
+     <div class="card-body">
+       <a href="#!/{{category.id}}/" class="stretched-link">
+         <img src="{{category.imgurl}}" class="card-img" alt="...">
+       </a>
+     </div>
+  </div>
+</div>

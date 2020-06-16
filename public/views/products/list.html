@@ -1,0 +1,11 @@
+<div class="card-columns">
+  <div class="card" ng-repeat="product in results">
+    <div class="card-header">{{product.nombre}}</div>
+     <div class="card-body">
+       <a href="#!/products/{{product.id}}/" class="stretched-link">
+         <img src="{{product.imgurl}}" class="card-img" alt="...">
+       </a>
+     </div>
+     <div class="card-footer">${{product.precio}}</div>
+  </div>
+</div>
