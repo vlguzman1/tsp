@@ -34,6 +34,11 @@ app.config(function($httpProvider,$routeProvider,$cookiesProvider) {
       controller : "registerCtrl",
       controllerAs: 'vm'
     })
+    .when("/cart/", {
+      templateUrl : "./views/cart/form.html",
+      controller : "cartCtrl",
+      controllerAs: 'vm'
+    })
     .when("/:idCat/", {
       templateUrl : "./views/products/list.html",
       controller : "productsCtrl"
@@ -120,6 +125,7 @@ app.controller("categoriesCtrl", function ($scope,$http, $routeParams, $location
       $scope.results = response.data;
   });
 });
+
 app.controller("productsCtrl", function ($scope,$http, $routeParams, $location, $cookies) {
   document.getElementById('header').style.display = "block";
   var logged = $cookies.get("logged");
@@ -128,6 +134,28 @@ app.controller("productsCtrl", function ($scope,$http, $routeParams, $location, 
     $location.path("/login/");
     return;
   }
+
+  $scope.addToCart = function (id) {
+    console.log(id);
+    var cartJSON = $cookies.get("cart");
+    if(cartJSON==undefined){
+      cart=[];
+    } else {
+      cart=JSON.parse(cartJSON);
+    }
+    var existente=0;
+    for(var i=0;i<cart.length;i++){
+      if(cart[i].id==id){
+        existente=1;
+        cart[i].cant=cart[i].cant+1;
+      }
+    }
+    if(existente==0) cart.push({id: id, cant:1});
+    $cookies.put("cart", JSON.stringify(cart));
+    console.log(cart);
+    window.alert("Elemento agregado al carrito.");
+  }
+
   if($routeParams.searchString!=undefined){
     console.log("Búsqueda...");
     $http.get(_URL_ + "/products/search/" + $routeParams.searchString + "/")
@@ -152,4 +180,29 @@ app.controller("productsCtrl", function ($scope,$http, $routeParams, $location, 
         $scope.data = response.data[0];
       });
   }
+});
+
+app.controller("cartCtrl", function ($scope,$http, $routeParams, $location, $cookies) {
+  document.getElementById('header').style.display = "block";
+  var logged = $cookies.get("logged");
+  console.log(logged);
+  if(logged=="false"){
+    $location.path("/login/");
+    return;
+  }
+
+  var cartJSON = $cookies.get("cart");
+  if(cartJSON==undefined){
+    cart=[];
+  } else {
+    cart=JSON.parse(cartJSON);
+  }
+  console.log(cart);
+/*
+  $http.get(_URL_ + "/categories/" + $routeParams.idCat + "/")
+    .then(function (response) {
+      console.log(response.data);
+      $scope.results = response.data;
+    });
+*/
 });

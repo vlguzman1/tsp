@@ -9,7 +9,7 @@
         <p class="card-text">${{data.precio}}</p>
         <p class="card-text">Tallas: {{data.tallas}}</p>
         <p class="card-text">Colores: {{data.colores}}</p>
-        <p class="card-text"><button type="button" class="btn btn-primary">Agregar al carrito</button></p>
+        <p class="card-text"><button type="button" ng-click="addToCart(data.id)" class="btn btn-primary">Agregar al carrito</button></p>
       </div>
     </div>
   </div>
