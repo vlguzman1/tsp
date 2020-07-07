@@ -207,13 +207,21 @@ app.controller("cartCtrl", function ($scope,$http, $routeParams, $location, $coo
 
   $http.get(_URL_ + "/cart/" + stringIds)
     .then(function (response) {
+      var total=0;
       for(var i=0;i<response.data.length;i++){
         for(var j=0;j<cart.length;j++){
-          if(response.data[i].id==cart[j].id) response.data[i].cant=cart[j].cant;
+          if(response.data[i].id==cart[j].id){
+            response.data[i].cant=cart[j].cant;
+            total=total+(parseInt(cart[j].cant)*parseFloat(response.data[i].precio));
+            console.log(cart[j].cant);
+            console.log(response.data[i].precio);
+          }
         }
       }
       console.log(response.data);
+      console.log(total);
       $scope.results = response.data;
+      $scope.total=total;
     });
 
 });
