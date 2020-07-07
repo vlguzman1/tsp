@@ -191,6 +191,33 @@ app.controller("cartCtrl", function ($scope,$http, $routeParams, $location, $coo
     return;
   }
 
+  $scope.removeFromCart = function (id) {
+    console.log(id);
+    var cartJSON = $cookies.get("cart");
+    if(cartJSON==undefined){
+      cart=[];
+    } else {
+      cart=JSON.parse(cartJSON);
+    }
+    newCart=[];
+    for(var i=0;i<cart.length;i++){
+      if(cart[i].id==id){
+        if(cart[i].cant>1){
+          cart[i].cant=cart[i].cant-1;
+          newCart.push(cart[i]);
+        }
+      }
+      else newCart.push(cart[i]);
+    }
+    $cookies.put("cart", JSON.stringify(newCart));
+    console.log(cart);
+    window.alert("Elemento eliminado del carrito.");
+    window.location.reload(true);
+  }
+
+
+
+
   var cartJSON = $cookies.get("cart");
   if(cartJSON==undefined){
     cart=[];
