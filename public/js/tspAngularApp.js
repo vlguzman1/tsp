@@ -113,7 +113,7 @@ app.controller("categoriesCtrl", function ($scope,$http, $routeParams, $location
   document.getElementById('header').style.display = "block";
   var logged = $cookies.get("logged");
   console.log(logged);
-  if(logged=="false"){
+  if(logged==undefined || logged=="false"){
     $location.path("/login/");
     return;
   }
@@ -130,7 +130,7 @@ app.controller("productsCtrl", function ($scope,$http, $routeParams, $location, 
   document.getElementById('header').style.display = "block";
   var logged = $cookies.get("logged");
   console.log(logged);
-  if(logged=="false"){
+  if(logged==undefined || logged=="false"){
     $location.path("/login/");
     return;
   }
@@ -186,7 +186,7 @@ app.controller("cartCtrl", function ($scope,$http, $routeParams, $location, $coo
   document.getElementById('header').style.display = "block";
   var logged = $cookies.get("logged");
   console.log(logged);
-  if(logged=="false"){
+  if(logged==undefined || logged=="false"){
     $location.path("/login/");
     return;
   }
