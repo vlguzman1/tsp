@@ -42,6 +42,32 @@ db.connect(function(err) {
 });
 
 // Rutas que manejan los requests:
+app.post("/cart", express.json({type: '*/*'}), (req, res, next) => {
+  console.log(req.body);
+  sql="INSERT INTO pedidos (fecha,id_usuario,direccion)";
+  sql+=" VALUES(now(),?,?)";
+  console.log(sql);
+  values=[req.body.userId,req.body.direccion];
+  db.query(sql, values,function (err, data, fields) {
+    if (err) throw err;
+    console.log(data);
+    var id_pedido=data.insertId;
+    for(i=0;i<req.body.cart.length;i++){
+      sql="INSERT INTO pedidos_productos (id_pedido,id_producto,cantidad)";
+      sql+=" VALUES(?,?,?)";
+      console.log(sql);
+      values=[id_pedido,req.body.cart[i].id,req.body.cart[i].cant];
+      db.query(sql, values,function (err, data, fields) {
+        if (err) throw err;
+        console.log(data);
+      });
+    }
+    respuesta={id:id_pedido};
+    res.json(respuesta);
+  });
+
+  //res.json({id:6654654});
+});
 
 app.post("/register", express.json({type: '*/*'}), (req, res, next) => {
 
@@ -63,7 +89,7 @@ app.post("/register", express.json({type: '*/*'}), (req, res, next) => {
       db.query(sql, values,function (err, data, fields) {
         if (err) throw err;
         console.log(data);
-        respuesta={ok:data.insertId};
+        respuesta={ok:'ok',id:data.insertId};
         res.json(respuesta);
       });
     } else{
@@ -93,9 +119,7 @@ app.post("/login", express.json({type: '*/*'}), (req, res, next) => {
     } else{
       res.json(data);
     }
-
   });
-
 });
 
 app.get("/categories", (req, res, next) => {

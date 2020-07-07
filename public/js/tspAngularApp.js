@@ -74,8 +74,7 @@ app.controller("loginCtrl", function ($scope,$http, $routeParams, $location, $co
         else{
           console.log("Redireccionando...");
           $cookies.put("logged", "true");
-          var value = $cookies.get("logged");
-          console.log(value);
+          $cookies.put("userId", response.data[0].id);
           $location.path("/");
         }
         vm.dataLoading = false;
@@ -101,6 +100,7 @@ app.controller("registerCtrl", function ($scope,$http, $routeParams, $location, 
         else{
           console.log("Redireccionando...");
           $cookies.put("logged", "true");
+          $cookies.put("userId", response.data.id);
           var value = $cookies.get("logged");
           console.log(value);
           $location.path("/");
@@ -190,6 +190,49 @@ app.controller("cartCtrl", function ($scope,$http, $routeParams, $location, $coo
     $location.path("/login/");
     return;
   }
+  var vm = this;
+
+  vm.dataLoading = false;
+
+  $scope.checkout = function () {
+    vm.dataLoading = true;
+    console.log(vm.user);
+    vm.dataLoading = false;
+
+    var cartJSON = $cookies.get("cart");
+    var userId = $cookies.get("userId");
+
+    if(cartJSON==undefined){
+      cart=[];
+    } else {
+      cart=JSON.parse(cartJSON);
+    }
+
+    console.log(cart);
+    console.log(userId);
+    var postdata = {
+      userId: userId,
+      direccion: vm.user.direccion,
+      cart: cart
+    };
+    console.log(postdata);
+
+    $http.post(_URL_ + "/cart/",postdata)
+      .then(function (response) {
+        console.log(response.data);
+        if(response.data.error!=undefined){
+          window.alert(response.data.error);
+        }
+        else{
+          console.log("Redireccionando...");
+
+          window.alert("Se generó el pedido #" + response.data.id);
+          $cookies.put("cart", "[]");
+          $location.path("/");
+        }
+        vm.dataLoading = false;
+      });
+  }
 
   $scope.removeFromCart = function (id) {
     console.log(id);
@@ -214,9 +257,6 @@ app.controller("cartCtrl", function ($scope,$http, $routeParams, $location, $coo
     window.alert("Elemento eliminado del carrito.");
     window.location.reload(true);
   }
-
-
-
 
   var cartJSON = $cookies.get("cart");
   if(cartJSON==undefined){
