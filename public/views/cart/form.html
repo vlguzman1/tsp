@@ -1,0 +1,17 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Producto</th>
+      <th scope="col">Cant</th>
+      <th scope="col">V/Unit</th>
+      <th scope="col">V/Total</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="product in results">
+    <td>{{product.nombre}}</td>
+    <td>{{product.cant}}</td>
+    <td>$ {{product.precio}}</td>
+    <td>$ {{product.precio * product.cant}}</td>
+  </tr>
+</table>

@@ -198,11 +198,22 @@ app.controller("cartCtrl", function ($scope,$http, $routeParams, $location, $coo
     cart=JSON.parse(cartJSON);
   }
   console.log(cart);
-/*
-  $http.get(_URL_ + "/categories/" + $routeParams.idCat + "/")
+  var stringIds="0";
+  for(var i=0;i<cart.length;i++){
+    stringIds+=",";
+    stringIds+=cart[i].id;
+  }
+  console.log(stringIds);
+
+  $http.get(_URL_ + "/cart/" + stringIds)
     .then(function (response) {
+      for(var i=0;i<response.data.length;i++){
+        for(var j=0;j<cart.length;j++){
+          if(response.data[i].id==cart[j].id) response.data[i].cant=cart[j].cant;
+        }
+      }
       console.log(response.data);
       $scope.results = response.data;
     });
-*/
+
 });

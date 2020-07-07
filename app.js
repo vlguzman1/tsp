@@ -118,6 +118,17 @@ app.get("/categories/:idCat", (req, res, next) => {
   });
 });
 
+app.get("/cart/:ids", (req, res, next) => {
+  var sql="SELECT *,CONCAT('" + IMGSURL + "/productos/imagen/',id,'.',SUBSTRING_INDEX(mmdd_imagen_filename,'.',-1)) as imgurl ";
+  sql+=" FROM productos";
+  sql+=" WHERE id IN(" + req.params.ids + ")";
+  sql+=" ORDER BY id_categoria, nombre";
+  db.query(sql, function (err, data, fields) {
+    if (err) throw err;
+    res.json(data);
+  });
+});
+
 app.get('/products/search/:searchTerm', function (req, res) {
   var sql="SELECT *,CONCAT('" + IMGSURL + "/productos/imagen/',id,'.',SUBSTRING_INDEX(mmdd_imagen_filename,'.',-1)) as imgurl ";
   sql+=" FROM productos";
